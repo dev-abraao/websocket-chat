@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useMessages } from "@ably/chat";
 
 export default function Msg() {

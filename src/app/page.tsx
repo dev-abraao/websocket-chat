@@ -5,10 +5,9 @@ import {
   ChatClientProvider,
   ChatRoomProvider,
   RoomOptionsDefaults,
-  useMessages,
 } from "@ably/chat";
-import SendMessage from "./components/messagehandler/SendMsg";
 import Msg from "./components/messagelistener/Listener";
+import ChatContainer from "./components/chat/ChatContainer";
 
 export default function Home() {
   const realtimeClient = new Ably.Realtime({
@@ -20,8 +19,8 @@ export default function Home() {
   return (
     <ChatClientProvider client={chatClient}>
       <ChatRoomProvider id="room-id" options={RoomOptionsDefaults}>
-        <SendMessage />
         <Msg />
+        <ChatContainer />
       </ChatRoomProvider>
     </ChatClientProvider>
   );
