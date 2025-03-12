@@ -11,7 +11,7 @@ import ChatContainer from "./components/chat/ChatContainer";
 
 export default function Home() {
   const realtimeClient = new Ably.Realtime({
-    key: "NhJcoA.Nyx0fQ:GYtfcRdXXu-_DEno3r8dS8rJBl_ojYaSTVLSfYtaV3U",
+    key: process.env.NEXT_PUBLIC_API_KEY,
     clientId: "jinzo",
   });
   const chatClient = new ChatClient(realtimeClient);
