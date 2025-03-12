@@ -1,0 +1,42 @@
+stages:
+  - release
+  - deploy
+
+variables:
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+release-job:
+  services:
+    - docker:dind
+  stage: release
+  image: docker:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build -t $CONTAINER_IMAGE .
+    - docker push $CONTAINER_IMAGE
+  after_script:
+    - docker logout
+  retry:
+    max: 2
+    when:
+      - always
+
+deploy-job:
+  services:
+    - docker:dind
+  stage: deploy
+  image: docker:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY -p 69 $SERVER_USER@$SERVER_IP "
+      docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+      cd /applications/getshorts &&
+      docker pull $CONTAINER_IMAGE &&
+      docker compose down &&
+      docker compose up -d"
