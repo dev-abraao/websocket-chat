@@ -28,10 +28,6 @@ export default function ChatBox() {
     }
   };
 
-  interface MessageMetadata {
-    username: string;
-  }
-
   return (
     <div className="h-screen bg-gray-100 flex-col justify-items-center">
       <div className="bg-white shadow-md rounded-lg p-4 mb-4">
@@ -57,10 +53,14 @@ export default function ChatBox() {
 
       <div className="bg-white max-w-3xl mx-auto shadow-md rounded-lg p-4 mb-4 h-[60vh] overflow-y-auto">
         {Array.isArray(receivedMessages) &&
-          // Ver esse any depois :D
-          receivedMessages.map((msg: any, index) => (
+          receivedMessages.map((msg, index) => (
             <p key={index} className="message break-words">
-              {msg.metadata.username} : {msg.text}
+              {typeof msg.metadata === "object" &&
+              msg.metadata &&
+              "username" in msg.metadata
+                ? String(msg.metadata.username)
+                : "Usuário"}{" "}
+              : {msg.text}
             </p>
           ))}
       </div>
