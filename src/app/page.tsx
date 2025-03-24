@@ -6,7 +6,6 @@ import {
   ChatRoomProvider,
   RoomOptionsDefaults,
 } from "@ably/chat";
-import Msg from "./components/messagelistener/Listener";
 import ChatContainer from "./components/chat/ChatContainer";
 
 export default function Home() {
@@ -19,7 +18,6 @@ export default function Home() {
   return (
     <ChatClientProvider client={chatClient}>
       <ChatRoomProvider id="room-id" options={RoomOptionsDefaults}>
-        <Msg />
         <ChatContainer />
       </ChatRoomProvider>
     </ChatClientProvider>
