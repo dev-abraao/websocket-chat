@@ -13,3 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String     @id @default(uuid())
+  login    String
+  username String
+  password String
+  rooms    Rooms[]
+  messages Messages[]
+}
+
+model Rooms {
+  id         String     @id @default(uuid())
+  name       String
+  owner      User       @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  owner_id   String
+  created_at DateTime
+  messages   Messages[]
+}
+
+model Messages {
+  id         String   @id @default(uuid())
+  room       Rooms    @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  room_id    String
+  content    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String
+  created_at DateTime @default(now())
+}
