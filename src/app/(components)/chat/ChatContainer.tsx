@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMessages, Message } from "@ably/chat";
-import HandleMessage from "@/app/handlers/HandleMessage";
+import HandleMessage from "@/(handlers)/HandleMessage";
 import InputName from "./InputName";
 
 export default function ChatBox() {

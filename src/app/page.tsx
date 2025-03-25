@@ -1,25 +1,12 @@
-"use client";
-import * as Ably from "ably";
-import {
-  ChatClient,
-  ChatClientProvider,
-  ChatRoomProvider,
-  RoomOptionsDefaults,
-} from "@ably/chat";
-import ChatContainer from "./components/chat/ChatContainer";
+import React from 'react'
+import SignupForm from './(components)/auth/SignupForm'
 
-export default function Home() {
-  const realtimeClient = new Ably.Realtime({
-    key: process.env.NEXT_PUBLIC_API_KEY,
-    clientId: "jinzo",
-  });
-  const chatClient = new ChatClient(realtimeClient);
-
+const page = () => {
   return (
-    <ChatClientProvider client={chatClient}>
-      <ChatRoomProvider id="room-id" options={RoomOptionsDefaults}>
-        <ChatContainer />
-      </ChatRoomProvider>
-    </ChatClientProvider>
-  );
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <SignupForm/>
+    </div>
+  )
 }
+
+export default page

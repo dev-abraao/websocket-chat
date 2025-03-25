@@ -1,4 +1,4 @@
-import HandleName from "@/app/handlers/HandleName"
+import HandleName from "@/(handlers)/HandleName"
 import React, { useEffect, useState } from "react"
 
 interface InputNameProps {
