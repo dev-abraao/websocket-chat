@@ -13,6 +13,11 @@ export const SignupFormSchema = z.object({
     })
     .trim(),
 })
+
+export const SignInSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string()
+})
  
 export type FormState =
   | {
@@ -25,3 +30,20 @@ export type FormState =
       success?: boolean
     }
   | undefined
+
+  export type SignFormState =
+  | {
+      errors?: {
+        email?: string[]
+        password?: string[]
+      }
+      message?: string
+      success?: boolean
+    }
+  | undefined
+
+export type SessionPayload =
+  {
+    userId: string,
+    expiresAt: Date
+  }

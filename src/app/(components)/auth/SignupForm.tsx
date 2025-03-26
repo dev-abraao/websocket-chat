@@ -2,18 +2,10 @@
  
 import { signup } from '@/actions/auth'
 import { useActionState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
  
 export default function SignupForm() {
   const [state, action, pending] = useActionState(signup, undefined)
-  const router = useRouter()
-  
-  useEffect(() => {
-    if (state?.success) {
-      router.push('/chat')
-    }
-  }, [state, router])
+
  
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
