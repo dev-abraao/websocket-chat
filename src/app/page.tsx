@@ -1,12 +1,13 @@
-import React from 'react'
-import SignupForm from './(components)/auth/SignupForm'
+import React from "react";
+import SignupForm from "./(components)/auth/SignupForm";
 
 const page = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <SignupForm/>
+      <SignupForm />
+      <a href="/signin">Login</a>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
