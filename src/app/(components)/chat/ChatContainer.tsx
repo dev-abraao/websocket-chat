@@ -1,6 +1,7 @@
 import Header from "./Header";
 import ChatBox from "./ChatBox";
 import InputText from "./InputText";
+import LogoutBtn from "../auth/LogoutBtn";
 
 export default function ChatCointainer() {
 
