@@ -1,4 +1,3 @@
-import { checkLogin } from "@/(actions)/login";
 import { NextResponse, NextRequest } from "next/server";
 
 export default function middleware(request: NextRequest) {

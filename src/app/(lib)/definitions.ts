@@ -19,6 +19,10 @@ export const SignInSchema = z.object({
   password: z.string().min(8, { message: "Mínimo de oito caractéres" }),
 });
 
+export const FormSchema = z.object({
+  name: z.string().min(1, { message: "Insira um nome de sala." }),
+});
+
 export type FormState =
   | {
       errors?: {
@@ -36,6 +40,16 @@ export type SignFormState =
       errors?: {
         email?: string[];
         password?: string[];
+      };
+      message?: string;
+      success?: boolean;
+    }
+  | undefined;
+
+export type RoomFormState =
+  | {
+      errors?: {
+        name?: string[];
       };
       message?: string;
       success?: boolean;

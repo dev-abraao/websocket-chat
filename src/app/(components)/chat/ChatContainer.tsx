@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMessages, Message } from "@ably/chat";
 import HandleMessage from "@/(handlers)/HandleMessage";
 import InputName from "./InputName";
+import CreateRoomForm from "../rooms/createRoomForm";
 import LogoutBtn from "../auth/LogoutBtn";
 
 export default function ChatBox() {
@@ -21,7 +22,7 @@ export default function ChatBox() {
         <div className="bg-white shadow-md rounded-lg p-4 mb-4">
           <h1>Chat</h1>
         </div>
-
+        <CreateRoomForm />
         <InputName name={name} setName={setName} />
         <LogoutBtn />
         <div className="bg-white max-w-3xl mx-auto shadow-md rounded-lg p-4 mb-4 h-[60vh] overflow-y-auto">
