@@ -11,7 +11,6 @@ export default function ChatCointainer() {
       <LogoutBtn/>
       <ChatBox />
       <InputText />
-
     </div>
   );
 }

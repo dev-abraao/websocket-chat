@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
+import { fetchName } from "@/(actions)/user";
 
-export default function HandleMessage(
+export default async function HandleMessage(
   e: React.FormEvent,
   message: string,
   setMessage: Dispatch<SetStateAction<string>>,
@@ -8,10 +9,18 @@ export default function HandleMessage(
 ) {
   e.preventDefault();
 
+  const username = await fetchName();
+  console.log("Username:", username);
+
+  if (!username) {
+    console.error("Username not found");
+    return;
+  }
+
   if (message.trim() !== "") {
     send({
       text: message,
-      metadata: { username: localStorage.getItem("name") || "Anônimo" },
+      metadata: { username },
     });
     console.log(message);
     setMessage("");

@@ -21,7 +21,7 @@ export async function decrypt(session: string | undefined = '') {
     })
     return payload
   } catch (error) {
-    console.log('Failed to verify session')
+    console.log(error)
   }
 }
  
@@ -59,9 +59,6 @@ export async function updateSession() {
     })
   }
 
-  import 'server-only'
-
- 
 export async function deleteSession() {
   const cookieStore = await cookies()
   cookieStore.delete('session')

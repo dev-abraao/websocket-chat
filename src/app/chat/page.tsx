@@ -1,7 +1,5 @@
 "use client";
-import * as Ably from "ably";
 import {
-  ChatClient,
   ChatClientProvider,
   ChatRoomProvider,
   RoomOptionsDefaults,

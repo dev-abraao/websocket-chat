@@ -1,3 +1,4 @@
+import { getUserId, getUsername } from "@/(actions)/user";
 import HandleName from "@/(handlers)/HandleName";
 import React, { useEffect, useState } from "react";
 
@@ -10,9 +11,16 @@ export default function InputName({ name, setName }: InputNameProps) {
   const [hasName, setHasName] = useState(false);
 
   useEffect(() => {
-    const savedName = localStorage.getItem("name");
-    setHasName(!!savedName);
+    fetchName();
   }, []);
+
+  async function fetchName() {
+    const userId = await getUserId();
+    if (userId) {
+      const savedName = await getUsername(userId);
+      setHasName(!!savedName);
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
