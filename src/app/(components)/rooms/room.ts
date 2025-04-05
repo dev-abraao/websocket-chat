@@ -1,7 +1,7 @@
+"use server";
 import { prisma } from "prisma/prisma";
 import { FormSchema, RoomFormState } from "@/(lib)/definitions";
-import { cookies } from "next/headers";
-import { decrypt } from "@/(lib)/session";
+import { getUserId } from "@/(actions)/user";
 
 export default async function createRoom(
   state: RoomFormState,
@@ -16,14 +16,8 @@ export default async function createRoom(
       errors: result.error.flatten().fieldErrors,
     };
   }
-  const cookie = (await cookies()).get("session")?.value;
 
-  if (!cookie) {
-    throw new Error("No session found");
-  }
-
-  const decryptedCookie = await decrypt(cookie);
-  const userId = decryptedCookie?.UserId as string | undefined;
+  const userId = await getUserId();
 
   if (!userId) {
     throw new Error("User ID not found in session");

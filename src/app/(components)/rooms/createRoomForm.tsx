@@ -1,7 +1,7 @@
 import { useActionState } from "react";
 import createRoom from "./room";
 
-export default async function CreateRoomForm() {
+export default function CreateRoomForm() {
   const [state, action, pending] = useActionState(createRoom, undefined);
 
   return (
