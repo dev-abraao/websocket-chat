@@ -5,7 +5,7 @@ const page = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <SignupForm />
-      <a href="/signin">Login</a>
+      <a href="/login">Login</a>
     </div>
   );
 };
