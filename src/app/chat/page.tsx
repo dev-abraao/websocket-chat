@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <ChatClientProvider client={chatClient}>
       <ChatRoomProvider id="room-id" options={RoomOptionsDefaults}>
-        <ChatBox />
+        <ChatContainer />
       </ChatRoomProvider>
     </ChatClientProvider>
   );
