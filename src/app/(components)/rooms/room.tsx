@@ -6,17 +6,14 @@ import {
   ChatRoomProvider,
   RoomOptionsDefaults,
 } from "@ably/chat";
-import ChatBox from "@/(components)/chat/ChatContainer";
-import { useAbly } from "@/contexts/AblyContext";
+import ChatBox from "../chat/ChatContainer";
 
 export default function Home() {
-  // const realtimeClient = new Ably.Realtime({
-  //   key: process.env.NEXT_PUBLIC_API_KEY,
-  //   clientId: "jinzo",
-  // });
-  // const chatClient = new ChatClient(realtimeClient);
-
-  const { chatClient } = useAbly();
+  const realtimeClient = new Ably.Realtime({
+    key: process.env.NEXT_PUBLIC_API_KEY,
+    clientId: "jinzo",
+  });
+  const chatClient = new ChatClient(realtimeClient);
 
   return (
     <ChatClientProvider client={chatClient}>
