@@ -8,7 +8,7 @@ import {
 } from "@/(lib)/definitions";
 import bcrypt from "bcryptjs";
 import { prisma } from "prisma/prisma";
-import { createSession, decrypt, deleteSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function signup(state: FormState, formData: FormData) {
