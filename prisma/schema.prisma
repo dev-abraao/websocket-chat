@@ -9,8 +9,8 @@ datasource db {
 
 model User {
   id       String     @id @default(uuid())
-  login    String
-  username String
+  login    String     @unique
+  username String     @db.VarChar(30)
   password String
   messages Messages[]
   rooms    Rooms[]
