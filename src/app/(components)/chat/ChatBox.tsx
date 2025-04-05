@@ -1,5 +1,6 @@
 import { useState } from "react";
 import InputName from "./InputName";
+import { useMessages } from "@ably/chat";
 
 // Definição explícita do tipo da mensagem (caso não esteja bem definido pelo Ably)
 interface ChatMessage {
@@ -13,6 +14,12 @@ function ChatBox() {
   // Estado tipado corretamente
   const [receivedMessages, setReceivedMessages] = useState<ChatMessage[]>([]);
   const [name, setName] = useState("Anônimo");
+
+  useMessages({
+    listener: (event: { message: ChatMessage }) => {
+      setReceivedMessages((prevMessages) => [...prevMessages, event.message]);
+    },
+  });
 
   return (
     <div className="flex flex-col items-center">
