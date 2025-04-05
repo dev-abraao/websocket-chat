@@ -20,7 +20,7 @@ export default async function createRoom(formData: FormData) {
   await prisma.rooms.create({
     data: {
       name: roomName,
-      owner_id: userId, // Now TypeScript knows userId is not undefined
+      owner_id: userId,
     },
   });
 }
