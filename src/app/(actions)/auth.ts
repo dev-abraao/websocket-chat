@@ -81,8 +81,20 @@ export async function signin(state: SignFormState, formData: FormData) {
   }
 
   const result = await bcrypt.compare(password, user.password);
-  await createSession(user.id);
-  redirect("/chat");
+
+  if (!result) {
+    console.error("Erro: senha incorreta");
+    return {
+      errors: {
+        password: ["Email ou senha incorretos!"],
+      },
+    };
+  }
+
+  if (result) {
+    await createSession(user.id);
+    redirect("/chat");
+  }
 }
 
 export async function logout() {
