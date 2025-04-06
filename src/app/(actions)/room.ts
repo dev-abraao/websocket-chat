@@ -41,3 +41,15 @@ export async function getRooms() {
 
   return rooms;
 }
+
+export async function getDefaultRoomId(){
+  const room = await prisma.rooms.findFirst({
+    where: {
+      is_default_room: true,
+    }
+  });
+  if (!room) {
+    throw new Error("No default room found");
+  }
+  return room.id;
+}
