@@ -11,10 +11,10 @@ interface CreateRoomModalProps {
   onRoomCreated?: () => void;
 }
 
-export default function CreateRoomModal({ 
-  isOpen, 
-  onClose, 
-  onRoomCreated 
+export default function CreateRoomModal({
+  isOpen,
+  onClose,
+  onRoomCreated,
 }: CreateRoomModalProps) {
   const [state, action, pending] = useActionState(createRoom, undefined);
   const [isPending, startTransition] = useTransition();
@@ -26,27 +26,27 @@ export default function CreateRoomModal({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    
+
     const formValues = {
-      name: formData.get('name') as string,
-      description: formData.get('description') as string
+      name: formData.get("name") as string,
+      description: formData.get("description") as string,
     };
-    
+
     const result = RoomFormSchema.safeParse(formValues);
-    
+
     if (!result.success) {
       const formattedErrors: Record<string, string> = {};
-      result.error.issues.forEach(issue => {
+      result.error.issues.forEach((issue) => {
         const path = String(issue.path[0]);
         formattedErrors[path] = issue.message;
       });
-      
+
       setValidationErrors(formattedErrors);
       return;
     }
-    
+
     setValidationErrors({});
-    
+
     startTransition(() => {
       action(formData);
       if (onRoomCreated) {
@@ -109,8 +109,9 @@ export default function CreateRoomModal({
               id="description"
               name="description"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
+              className="resize-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
               placeholder="Descreva o propósito da sala"
+              maxLength={50}
             ></textarea>
             {validationErrors.description && (
               <p className="mt-1 text-sm text-red-600">

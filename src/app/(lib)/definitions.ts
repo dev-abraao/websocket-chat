@@ -24,6 +24,10 @@ export const RoomFormSchema = z.object({
   description: z.string().optional(),
 });
 
+export const NameModalSchema = z.object({
+  username: z.string().min(1, { message: "Insira um nome de exibição." }),
+});
+
 export type FormState =
   | {
       errors?: {
@@ -57,6 +61,14 @@ export type RoomFormState =
       success?: boolean;
     }
   | undefined;
+
+export type nameModalState = {
+  errors?: {
+    username?: string[];
+  };
+  message?: string;
+  success?: boolean;
+} | void;
 
 export type SessionPayload = {
   userId: string;

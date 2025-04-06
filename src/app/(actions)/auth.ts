@@ -77,7 +77,11 @@ export async function signin(state: SignFormState, formData: FormData) {
   if (!user) {
     console.log(user);
     console.error("Erro: usuário não existe");
-    return;
+    return {
+      errors: {
+        email: ["Email ou senha incorretos!"],
+      },
+    };
   }
 
   const result = await bcrypt.compare(password, user.password);

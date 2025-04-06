@@ -3,6 +3,7 @@ import ChatBox from "./ChatBox";
 import InputText from "./InputText";
 import LogoutBtn from "../auth/LogoutBtn";
 import ViewRooms from "../rooms/viewRooms";
+import NameModal from "./NameModal";
 
 export default function ChatCointainer() {
   return (
@@ -11,6 +12,7 @@ export default function ChatCointainer() {
       <ViewRooms />
       <LogoutBtn />
       <ChatBox />
+      <NameModal />
       <InputText />
     </div>
   );

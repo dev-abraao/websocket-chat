@@ -25,9 +25,6 @@ export default function SigninForm() {
             placeholder="Email"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {state?.errors?.email && (
-            <p className="mt-1 text-sm text-red-600">{state.errors.email[0]}</p>
-          )}
         </div>
 
         <div>
@@ -44,6 +41,11 @@ export default function SigninForm() {
             type="password"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {state?.errors?.email && (
+            <p className="mt-1 text-sm text-red-600">
+              <li>{state.errors.email}</li>
+            </p>
+          )}
           {state?.errors?.password && (
             <div className="mt-1 text-sm text-red-600">
               <ul className="list-disc pl-5">

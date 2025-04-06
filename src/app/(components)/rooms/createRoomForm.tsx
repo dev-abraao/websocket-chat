@@ -20,8 +20,8 @@ export default function CreateRoomForm({ onRoomCreated }: CreateRoomFormProps) {
         Criar Sala
       </button>
 
-      <CreateRoomModal 
-        isOpen={isModalOpen} 
+      <CreateRoomModal
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onRoomCreated={onRoomCreated}
       />
