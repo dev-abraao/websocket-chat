@@ -37,14 +37,14 @@ export default function NameModal() {
       </button>
 
       {showModal && (
-        <div className="bg-black bg-opacity-50 fixed inset-0 flex items-center justify-center p-10 ">
-          <div className="bg-white">
-            <div className="flex justify-center bg-[#7A80DA] text-white p-3 w-[400px]">
-              <h2 className="flex text-xl">Trocar Nome</h2>
+        <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 z-50">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-fadeIn">
+            <div className="bg-[#7A80DA] text-white p-4">
+              <h2 className="text-xl font-semibold text-center">Trocar Nome</h2>
             </div>
-            <form action={action} className="flex flex-col">
-              <p className="text-center mt-4 mb-2">
-                Nome atual: {name}
+            <form action={action} className="p-6">
+              <p className="text-center text-gray-700 mb-4">
+                Nome atual: <span className="font-medium">{name}</span>
               </p>
               <input
                 type="text"
@@ -53,15 +53,27 @@ export default function NameModal() {
                 placeholder={state?.errors?.username
                   ? "Não foi possível alterar o nome"
                   : "Digite seu novo nome"}
-                className={`mx-auto rounded-lg shadow-lg border my-[50px] w-[300px] h-[30px] p-2
-                ${state?.errors?.username ? 'border-red-500 placeholder-red-500' : 'border-3'}`}
+                className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-[#7A80DA] transition-all
+                ${state?.errors?.username ? 'border-red-500 text-red-500 placeholder-red-500' : 'border-gray-300'}`}
               />
-              <div className="flex justify-end gap-4 mb-2 mr-2">
-                <button type="submit" className="bg-[#7A80DA] hover:bg-[#5a62ce] text-white font-bold py-1 px-2 rounded-lg">
-                  Confirmar
-                </button>
-                <button onClick={openModal} className="bg-[#7A80DA] hover:bg-[#5a62ce] text-white font-bold py-1 px-2 rounded-lg">
+              {state?.errors?.username && (
+                <p className="mt-1 text-sm text-red-500">{state.errors.username}</p>
+              )}
+              <div className="flex justify-end gap-3 mt-6">
+                <button 
+                  type="button" 
+                  onClick={openModal} 
+                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+                >
                   Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={pending}
+                  className="bg-[#7A80DA] hover:bg-[#5a62ce] text-white font-medium px-4 py-2 rounded-lg transition-colors 
+                  disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {pending ? "Enviando..." : "Confirmar"}
                 </button>
               </div>
             </form>
