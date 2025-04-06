@@ -1,19 +1,23 @@
 import Header from "./Header";
 import ChatBox from "./ChatBox";
 import InputText from "./InputText";
-import LogoutBtn from "../auth/LogoutBtn";
 import ViewRooms from "../rooms/viewRooms";
-import NameModal from "./NameModal";
 
-export default function ChatCointainer() {
+export default function ChatContainer() {
   return (
-    <div className="bg-[#F4F4F4] h-screen ">
+    <div className="h-screen flex flex-col bg-gray-100">
       <Header />
-      <ViewRooms />
-      <LogoutBtn />
-      <ChatBox />
-      <NameModal />
-      <InputText />
+      <div className="flex flex-1 overflow-hidden">
+        <div className="w-64 bg-white shadow-lg">
+          <ViewRooms />
+        </div>
+        <div className="flex-1 flex flex-col">
+          <ChatBox />
+          <div className="p-4 bg-white shadow-lg">
+            <InputText />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

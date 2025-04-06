@@ -27,6 +27,18 @@ export async function signup(state: FormState, formData: FormData) {
   const { email, username, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  const user = await prisma.user.findUnique({
+    where: {
+      login: email,
+    },
+  });
+
+  if (user) {
+    return {
+      message: "Esse e-mail já está cadastrado!",
+    };
+  }
+
   try {
     const user = await prisma.user.create({
       data: {

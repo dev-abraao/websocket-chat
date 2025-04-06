@@ -52,25 +52,33 @@ export default function NameModal() {
                 type="text"
                 name="username"
                 id="username"
-                placeholder={state?.errors?.username
-                  ? "Não foi possível alterar o nome"
-                  : "Digite seu novo nome"}
+                placeholder={
+                  state?.errors?.username
+                    ? "Não foi possível alterar o nome"
+                    : "Digite seu novo nome"
+                }
                 className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-[#7A80DA] transition-all
-                ${state?.errors?.username ? 'border-red-500 text-red-500 placeholder-red-500' : 'border-gray-300'}`}
+                ${
+                  state?.errors?.username
+                    ? "border-red-500 text-red-500 placeholder-red-500"
+                    : "border-gray-300"
+                }`}
               />
               {state?.errors?.username && (
-                <p className="mt-1 text-sm text-red-500">{state.errors.username}</p>
+                <p className="mt-1 text-sm text-red-500">
+                  {state.errors.username}
+                </p>
               )}
               <div className="flex justify-end gap-3 mt-6">
-                <button 
-                  type="button" 
-                  onClick={openModal} 
+                <button
+                  type="button"
+                  onClick={openModal}
                   className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
                 >
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={pending}
                   className="bg-[#7A80DA] hover:bg-[#5a62ce] text-white font-medium px-4 py-2 rounded-lg transition-colors 
                   disabled:opacity-70 disabled:cursor-not-allowed"

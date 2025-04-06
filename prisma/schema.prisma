@@ -17,14 +17,14 @@ model User {
 }
 
 model Rooms {
-  id           String     @id @default(uuid())
-  name         String
-  description  String?
-  owner_id     String
-  created_at   DateTime   @default(now())
-  messages     Messages[]
-  owner        User       @relation(fields: [owner_id], references: [id], onDelete: Cascade)
-  is_default_room Boolean @default(false)
+  id              String     @id @default(uuid())
+  name            String
+  description     String?
+  owner_id        String
+  created_at      DateTime   @default(now())
+  messages        Messages[]
+  owner           User       @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  is_default_room Boolean    @default(false)
 }
 
 model Messages {
