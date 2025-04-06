@@ -6,7 +6,7 @@ import { IRoom } from "@/(lib)/definitions";
 import CreateRoomForm from "./createRoomForm";
 import { MdRefresh } from "react-icons/md";
 import Link from "next/link";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 export default function ViewRooms() {
   const [rooms, setRooms] = useState<IRoom[]>([]);
@@ -32,8 +32,7 @@ export default function ViewRooms() {
   }, []);
 
   return (
-    <div className="bg-[#F4F4F4] h-screen w-64 border-r border-gray-200 fixed left-0 top-0 overflow-y-auto">
-      <CreateRoomForm onRoomCreated={fetchRooms} />
+    <div className="bg-[#F4F4F4] rounded w-64 border-r border-gray-200 fixed left-0 top-[4.2rem] bottom-0 flex flex-col">
       <div className="flex justify-between items-center border-b border-gray-200">
         <h1 className="text-xl font-bold p-4">Salas</h1>
         <button
@@ -53,7 +52,7 @@ export default function ViewRooms() {
       ) : error ? (
         <div className="p-4 text-red-500">Erro ao carregar as salas</div>
       ) : (
-        <div className="p-2">
+        <div className="p-2 overflow-y-auto flex-grow">
           {rooms.length === 0 ? (
             <p className="text-gray-500 text-center p-4">
               Nenhuma sala encontrada
@@ -61,14 +60,16 @@ export default function ViewRooms() {
           ) : (
             rooms.map((room) => (
               <Link key={room.id} href={`/chat/${room.id}`}>
-                <div
-                  className="bg-white p-3 rounded-lg mb-2 shadow-sm hover:bg-gray-50 cursor-pointer transition"
-                >
+                <div className="bg-white p-3 rounded-lg mb-2 shadow-sm hover:bg-gray-50 cursor-pointer transition">
                   <h2 className="text-md font-semibold truncate">
                     {room.name}
                   </h2>
+                  <p className="text-sm text-gray-600">
+                    {room.description || "Sem descrição"}
+                  </p>
                   <p className="text-xs text-gray-500">
-                    Criada em: {format(new Date(room.created_at), 'dd/MM/yyyy HH:mm:ss')}
+                    Criada em:{" "}
+                    {format(new Date(room.created_at), "dd/MM/yyyy HH:mm:ss")}
                   </p>
                 </div>
               </Link>
@@ -76,6 +77,7 @@ export default function ViewRooms() {
           )}
         </div>
       )}
+      <CreateRoomForm onRoomCreated={fetchRooms} />
     </div>
   );
 }

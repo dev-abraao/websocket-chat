@@ -1,6 +1,10 @@
 "use client";
 
-import { ChatClientProvider, ChatRoomProvider, RoomOptionsDefaults } from "@ably/chat";
+import {
+  ChatClientProvider,
+  ChatRoomProvider,
+  RoomOptionsDefaults,
+} from "@ably/chat";
 import { useAbly } from "@/contexts/AblyContext";
 import ChatCointainer from "@/(components)/chat/ChatContainer";
 
@@ -15,7 +19,6 @@ export default function RoomPage({ roomId }: RoomProps) {
     <ChatClientProvider client={chatClient}>
       <ChatRoomProvider id={roomId} options={RoomOptionsDefaults}>
         <ChatCointainer />
-
       </ChatRoomProvider>
     </ChatClientProvider>
   );

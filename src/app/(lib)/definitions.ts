@@ -19,8 +19,9 @@ export const SignInSchema = z.object({
   password: z.string().min(8, { message: "Mínimo de oito caractéres" }),
 });
 
-export const FormSchema = z.object({
+export const RoomFormSchema = z.object({
   name: z.string().min(1, { message: "Insira um nome de sala." }),
+  description: z.string().optional(),
 });
 
 export type FormState =
@@ -50,6 +51,7 @@ export type RoomFormState =
   | {
       errors?: {
         name?: string[];
+        description?: string[];
       };
       message?: string;
       success?: boolean;
@@ -73,6 +75,8 @@ export interface IRoom {
   name: string;
   owner_id: string;
   created_at: Date;
+  description: string | null;
+  is_default_room: boolean;
 }
 
 export interface IMessage {
