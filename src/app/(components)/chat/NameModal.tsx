@@ -22,9 +22,11 @@ export default function NameModal() {
   useEffect(() => {
     if (state?.data && state.data.success) {
       setShowModal(false);
+      // Force a complete page refresh to update all components with the new identity
+      window.location.reload();
+    } else {
       fetchName();
     }
-    fetchName();
   }, [state]);
 
   return (
