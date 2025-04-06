@@ -79,4 +79,7 @@ export async function updateUsername(
       username: username,
     },
   });
+  return {
+    data: { success: true || false },
+  };
 }
