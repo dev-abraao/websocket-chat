@@ -5,6 +5,7 @@ import { useState } from "react";
 function InputText() {
 
     const [message, setMessage] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [receivedMessages, setReceivedMessages] = useState<Message[]>([]);
     const { send } = useMessages({
         listener: (event) => {

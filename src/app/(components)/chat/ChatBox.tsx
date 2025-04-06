@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import InputName from "./InputName";
 import { useMessages } from "@ably/chat";

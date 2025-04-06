@@ -1,5 +1,6 @@
 'use server'
 
+import { IUser } from "@/(lib)/definitions";
 import { decrypt } from "@/(lib)/session";
 import { cookies } from "next/headers";
 import { prisma } from "prisma/prisma";
@@ -27,7 +28,7 @@ export async function getUserId() {
     return userId
 }
 
-export async function getUsername(userId: string) {
+export async function getUser(userId: string): Promise<IUser | null> {
     const user = await prisma.user.findUnique({
         where: {
             id: userId
@@ -38,19 +39,17 @@ export async function getUsername(userId: string) {
 
     if (!user) {
         console.error("User not found");
-        return;
+        return null;
     }
 
-    console.log("Username:", user.username)
-
-    return user.username;
+    return user;
 }
 
-export async function fetchName() {
+export async function fetchUsername(): Promise<string | undefined | null> {
     const userId = await getUserId();
     if (userId) {
-        const username = await getUsername(userId);
-        return username;
+        const user = await getUser(userId);
+        return user?.username;
     }
     return null;
   }

@@ -60,3 +60,25 @@ export type SessionPayload = {
   userId: string;
   expiresAt: Date;
 };
+
+export interface IUser {
+  id: string;
+  login: string;
+  username: string;
+  password: string;
+}
+
+export interface IRoom {
+  id: string;
+  name: string;
+  owner_id: string;
+  created_at: Date;
+}
+
+export interface IMessage {
+  id: string;
+  room_id: string;
+  user_id: string;
+  content: string;
+  created_at: Date;
+}

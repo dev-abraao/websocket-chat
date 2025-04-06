@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { fetchName } from "@/(actions)/user";
+import { fetchUsername } from "@/(actions)/user";
 
 export default async function HandleMessage(
   e: React.FormEvent,
@@ -9,7 +9,7 @@ export default async function HandleMessage(
 ) {
   e.preventDefault();
 
-  const username = await fetchName();
+  const username = await fetchUsername();
   console.log("Username:", username);
 
   if (!username) {

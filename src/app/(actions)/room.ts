@@ -26,7 +26,18 @@ export default async function createRoom(
   await prisma.rooms.create({
     data: {
       name: result.data.name,
-      owner_id: userId, // Now TypeScript knows userId is not undefined
+      owner_id: userId,
+      created_at: new Date(),
     },
   });
+}
+
+export async function getRooms() {
+  const rooms = await prisma.rooms.findMany({
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  return rooms;
 }

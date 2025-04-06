@@ -1,4 +1,4 @@
-import { getUserId, getUsername } from "@/(actions)/user";
+import { getUserId, getUser } from "@/(actions)/user";
 import HandleName from "@/(handlers)/HandleName";
 import React, { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ export default function InputName({ name, setName }: InputNameProps) {
   async function fetchName() {
     const userId = await getUserId();
     if (userId) {
-      const savedName = await getUsername(userId);
+      const savedName = await getUser(userId);
       setHasName(!!savedName);
     }
   }
