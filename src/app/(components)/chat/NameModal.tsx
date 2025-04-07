@@ -57,7 +57,8 @@ export default function NameModal() {
                     ? "Não foi possível alterar o nome"
                     : "Digite seu novo nome"
                 }
-                className={`w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-[#7A80DA] transition-all
+                maxLength={20}
+                className={`w-full text-black rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-[#7A80DA] transition-all
                 ${
                   state?.errors?.username
                     ? "border-red-500 text-red-500 placeholder-red-500"

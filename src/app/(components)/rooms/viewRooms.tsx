@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getRoomsByCategory } from "@/(actions)/room";
+import { getRoomsByCategory, deleteRoom } from "@/(actions)/room";
 import { CategorizedRooms } from "@/(lib)/definitions";
 import CreateRoomForm from "./createRoomForm";
-import { MdRefresh, MdMenu, MdClose } from "react-icons/md";
+import { MdRefresh, MdMenu, MdClose, MdDelete } from "react-icons/md";
 import Link from "next/link";
 import { format } from "date-fns";
 import { hasUserCreatedRoom } from "@/(actions)/user";
@@ -50,6 +50,25 @@ export default function ViewRooms() {
     fetchRooms();
     fetchUserStatus();
   }, []);
+
+  const handleDeleteRoom = async (e: React.MouseEvent, roomId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (confirm("Tem certeza que deseja excluir esta sala? Esta ação não pode ser desfeita.")) {
+      try {
+        setLoading(true);
+        await deleteRoom(roomId);
+        fetchRooms();
+        fetchUserStatus();
+      } catch (error) {
+        console.error("Erro ao excluir sala:", error);
+        alert("Não foi possível excluir a sala.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   const displayedRooms = () => {
     switch (activeTab) {
@@ -140,20 +159,32 @@ export default function ViewRooms() {
               </p>
             ) : (
               displayedRooms().map((room) => (
-                <Link key={room.id} href={`/chat/${room.id}`}>
-                  <div className="bg-white p-3 rounded-lg mb-2 shadow-sm hover:bg-gray-50 cursor-pointer transition">
-                    <h2 className="text-md font-semibold truncate">
-                      {room.name}
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      {room.description || "Sem descrição"}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Criada em:{" "}
-                      {format(new Date(room.created_at), "dd/MM/yyyy HH:mm:ss")}
-                    </p>
-                  </div>
-                </Link>
+                <div key={room.id} className="relative mb-2">
+                  <Link href={`/chat/${room.id}`}>
+                    <div className="bg-white p-3 rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer transition">
+                      <h2 className="text-md font-semibold truncate pr-7">
+                        {room.name}
+                      </h2>
+                      <p className="text-sm text-gray-600">
+                        {room.description || "Sem descrição"}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Criada em:{" "}
+                        {format(new Date(room.created_at), "dd/MM/yyyy HH:mm:ss")}
+                      </p>
+                    </div>
+                  </Link>
+                  
+                  {activeTab === "created" && (
+                    <button 
+                      onClick={(e) => handleDeleteRoom(e, room.id)}
+                      className="absolute top-3 right-3 p-1.5 text-gray-500 hover:text-red-500 hover:bg-gray-100 rounded-full transition-colors z-10"
+                      title="Excluir sala"
+                    >
+                      <MdDelete size={18} />
+                    </button>
+                  )}
+                </div>
               ))
             )}
           </div>

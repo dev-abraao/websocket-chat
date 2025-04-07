@@ -196,4 +196,13 @@ export async function deleteRoom(roomId: string) {
   await prisma.rooms.delete({
     where: { id: roomId },
   });
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      hasCreatedRoom: false,
+    },
+  })
 }
