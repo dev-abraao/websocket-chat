@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { getDefaultRoomId } from "@/(actions)/room";
 import { useRouter } from "next/navigation";
-import { MdRefresh } from "react-icons/md";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
