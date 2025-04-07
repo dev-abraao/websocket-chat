@@ -83,3 +83,18 @@ export async function updateUsername(
     data: { success: true || false },
   };
 }
+
+export async function hasUserCreatedRoom() {
+  const userId = await getUserId();
+  
+  if (!userId) {
+    return false;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { hasCreatedRoom: true }
+  });
+
+  return user?.hasCreatedRoom ?? false;
+}

@@ -15,6 +15,7 @@ model User {
   messages      Messages[]
   ownedRooms    Rooms[]
   roomsJoined   UserInRoom[]
+  hasCreatedRoom Boolean       @default(false)
 }
 
 model Rooms {

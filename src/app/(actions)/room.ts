@@ -32,6 +32,15 @@ export default async function createRoom(
       created_at: new Date(),
     },
   });
+
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      hasCreatedRoom: true,
+    },
+  })
 }
 
 export async function getRooms() {
@@ -56,11 +65,6 @@ export async function getDefaultRoomId() {
   return room.id;
 }
 
-/**
- * Adds the current user to a room
- * @param roomId The ID of the room to join
- * @returns void
- */
 export async function joinRoom(roomId: string) {
   const userId = await getUserId();
   
@@ -68,7 +72,6 @@ export async function joinRoom(roomId: string) {
     throw new Error("User ID not found in session");
   }
 
-  // Check if the room exists
   const room = await prisma.rooms.findUnique({
     where: { id: roomId },
   });
@@ -77,7 +80,6 @@ export async function joinRoom(roomId: string) {
     throw new Error("Room not found");
   }
 
-  // Add the user to the room if they're not already a member
   await prisma.userInRoom.upsert({
     where: {
       userId_roomId: {
@@ -85,7 +87,7 @@ export async function joinRoom(roomId: string) {
         roomId,
       },
     },
-    update: {}, // No updates needed, just ensure the relationship exists
+    update: {},
     create: {
       userId,
       roomId,
@@ -93,11 +95,6 @@ export async function joinRoom(roomId: string) {
   });
 }
 
-/**
- * Gets all users in a specific room
- * @param roomId The ID of the room
- * @returns List of users in the room
- */
 export async function getRoomMembers(roomId: string) {
   const members = await prisma.userInRoom.findMany({
     where: { roomId },
@@ -116,4 +113,87 @@ export async function getRoomMembers(roomId: string) {
     username: member.user.username,
     joinedAt: member.joinedAt
   }));
+}
+
+export async function getRoomsByCategory() {
+  const userId = await getUserId();
+  
+  if (!userId) {
+    throw new Error("User ID not found in session");
+  }
+
+  const createdRooms = await prisma.rooms.findMany({
+    where: {
+      owner_id: userId
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  const joinedRooms = await prisma.rooms.findMany({
+    where: {
+      members: {
+        some: {
+          userId: userId
+        }
+      },
+      NOT: {
+        owner_id: userId
+      }
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  const otherRooms = await prisma.rooms.findMany({
+    where: {
+      NOT: {
+        OR: [
+          { owner_id: userId },
+          {
+            members: {
+              some: {
+                userId: userId
+              }
+            }
+          }
+        ]
+      }
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+
+  return {
+    createdRooms,
+    joinedRooms,
+    otherRooms
+  };
+}
+
+export async function deleteRoom(roomId: string) {
+  const userId = await getUserId();
+  
+  if (!userId) {
+    throw new Error("User ID not found in session");
+  }
+
+  const room = await prisma.rooms.findUnique({
+    where: { id: roomId },
+  });
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  if (room.owner_id !== userId) {
+    throw new Error("You are not the owner of this room");
+  }
+
+  await prisma.rooms.delete({
+    where: { id: roomId },
+  });
 }

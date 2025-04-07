@@ -71,6 +71,12 @@ export default function CreateRoomModal({
           </button>
         </div>
 
+        {state?.errors && (
+          <div className={`p-3 mb-4 rounded-md ${state ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+            {state.errors.name}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label

@@ -98,3 +98,9 @@ export interface IMessage {
   content: string;
   created_at: Date;
 }
+
+export interface CategorizedRooms {
+  createdRooms: IRoom[];
+  joinedRooms: IRoom[];
+  otherRooms: IRoom[];
+}
