@@ -3,7 +3,7 @@
 import { IUser, nameModalState } from "@/(lib)/definitions";
 import { decrypt } from "@/(lib)/session";
 import { cookies } from "next/headers";
-import { prisma } from "prisma/prisma";
+import { prisma } from "@/(lib)/db";
 import { NameModalSchema } from "@/(lib)/definitions";
 
 export async function getUserId() {

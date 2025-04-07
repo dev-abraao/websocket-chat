@@ -1,5 +1,5 @@
 "use server";
-import { prisma } from "prisma/prisma";
+import { prisma } from "@/(lib)/db";
 import { RoomFormSchema, RoomFormState } from "@/(lib)/definitions";
 import { getUserId } from "@/(actions)/user";
 

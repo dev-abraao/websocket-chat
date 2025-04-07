@@ -7,7 +7,7 @@ import {
   SignFormState,
 } from "@/(lib)/definitions";
 import bcrypt from "bcryptjs";
-import { prisma } from "prisma/prisma";
+import { prisma } from "@/(lib)/db";
 import { createSession, deleteSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
