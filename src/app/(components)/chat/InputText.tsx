@@ -11,7 +11,7 @@ import CharacterCounter from "./CharacterCounter";
 function InputText() {
   const [message, setMessage] = useState("");
   const { send } = useMessages();
-  const MAX_LENGTH = 45;
+  const MAX_LENGTH = 150;
   const params = useParams();
   const roomId = params?.roomId as string;
 

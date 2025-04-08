@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useMessages } from "@ably/chat";
 import { fetchUsername } from "@/(actions)/user";
 import { getMessagesByRoomId } from "@/(actions)/message";
 import { useParams } from "next/navigation";
 
 interface ChatMessage {
+  id?: string;
   text: string;
   metadata?: {
     username?: string;
@@ -26,7 +27,9 @@ function ChatBox() {
   const [dbMessages, setDbMessages] = useState<DbMessage[]>([]);
   const [myUsername, setMyUsername] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const params = useParams() || {};
   const roomId = params.roomId as string;
 
@@ -63,29 +66,53 @@ function ChatBox() {
     },
   });
 
+  const allMessages = useMemo(() => {
+    return [
+      ...dbMessages.map(msg => ({
+        id: msg.id,
+        text: msg.content,
+        metadata: { username: msg.username },
+        timestamp: new Date(msg.createdAt).getTime()
+      })),
+      ...receivedMessages.map(msg => ({
+        ...msg,
+        id: msg.id || `${msg.timestamp}-${msg.metadata?.username}`,
+        timestamp: new Date(msg.timestamp || Date.now()).getTime()
+      }))
+    ].filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+     .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+  }, [dbMessages, receivedMessages]);
+
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
+  }, []);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [receivedMessages, dbMessages]);
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      setIsAutoScroll(scrollHeight - (scrollTop + clientHeight) < 50);
+    };
 
-  const allMessages = [
-    ...dbMessages.map(msg => ({
-      text: msg.content,
-      metadata: { username: msg.username },
-      timestamp: new Date(msg.createdAt).getTime()
-    })),
-    ...receivedMessages.map(msg => ({
-      ...msg,
-      timestamp: new Date(msg.timestamp || Date.now()).getTime()
-    }))
-  ].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isAutoScroll) {
+      const isNewMessage = allMessages.length > dbMessages.length;
+      scrollToBottom(isNewMessage ? 'smooth' : 'auto');
+    }
+  }, [allMessages, isAutoScroll, scrollToBottom, dbMessages.length]);
 
   return (
     <div className="flex-1 overflow-hidden">
-      <div className="h-full p-4 overflow-y-auto space-y-4">
+      <div 
+        ref={scrollContainerRef}
+        className="h-full p-4 overflow-y-auto space-y-4"
+      >
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin h-8 w-8 border-4 border-[#7A80DA] rounded-full border-t-transparent"></div>
@@ -99,18 +126,16 @@ function ChatBox() {
             <p className="text-gray-400 text-sm">Seja o primeiro a enviar uma mensagem!</p>
           </div>
         ) : (
-          allMessages.map((msg, index) => {
+          allMessages.map((msg) => {
             const isMyMessage = msg.metadata?.username === myUsername;
 
             return (
               <div
-                key={index}
-                className={`flex ${
-                  isMyMessage ? "justify-end" : "justify-start"
-                }`}
+                key={msg.id}
+                className={`flex ${isMyMessage ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[70%] break-words rounded-lg px-4 py-2 ${
+                  className={`max-w-[90%] md:max-w-[70%] break-words rounded-lg px-4 py-2 ${
                     isMyMessage ? "bg-[#7A80DA] text-white" : "bg-white shadow-md"
                   }`}
                 >
