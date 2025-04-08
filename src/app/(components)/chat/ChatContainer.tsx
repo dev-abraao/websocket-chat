@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "./Header";
 import ChatBox from "./ChatBox";
 import InputText from "./InputText";

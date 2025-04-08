@@ -18,11 +18,13 @@ export default async function createRoom(
     };
   }
 
-  const userId = await getUserId();
+  const userIdObj = await getUserId();
 
-  if (!userId) {
+  if (!userIdObj) {
     throw new Error("User ID not found in session");
   }
+
+  const userId = userIdObj.toString();
 
   await prisma.rooms.create({
     data: {
@@ -66,11 +68,13 @@ export async function getDefaultRoomId() {
 }
 
 export async function joinRoom(roomId: string) {
-  const userId = await getUserId();
+  const userIdObj = await getUserId();
   
-  if (!userId) {
+  if (!userIdObj) {
     throw new Error("User ID not found in session");
   }
+  
+  const userId = userIdObj.toString();
 
   const room = await prisma.rooms.findUnique({
     where: { id: roomId },

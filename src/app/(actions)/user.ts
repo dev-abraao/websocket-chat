@@ -11,21 +11,24 @@ export async function getUserId() {
   const session = cookieStore.get("session")?.value;
 
   if (!session) {
-    console.error("Session cookie is missing");
-    return;
+    console.log("Sessão não encontrada");
+    return null;
   }
 
-  const payload = await decrypt(session);
-  const userId = payload?.userId as string | undefined;
+  try {
+    const payload = await decrypt(session);
+    const userId = payload?.userId;
 
-  if (!userId) {
-    console.error("User ID is missing in the payload");
-    return;
+    if (!userId) {
+      console.error("UserID não encontrado no payload da sessão");
+      return null;
+    }
+
+    return userId;
+  } catch (error) {
+    console.error("Erro ao decodificar a sessão:", error);
+    return null;
   }
-
-  console.log("User ID:", userId);
-
-  return userId;
 }
 
 export async function getUser(userId: string): Promise<IUser | null> {
@@ -46,13 +49,16 @@ export async function getUser(userId: string): Promise<IUser | null> {
 }
 
 export async function fetchUsername(): Promise<string | undefined | null> {
-  const userId = await getUserId();
+  const userId = await getUserId() as string;
   if (userId) {
-    const user = await getUser(userId);
-    return user?.username;
+    if (typeof userId === "string") {
+      const user = await getUser(userId);
+      return user?.username;
+    }
   }
   return null;
 }
+
 
 export async function updateUsername(
   state: nameModalState,
@@ -71,9 +77,13 @@ export async function updateUsername(
   const { username } = result.data;
   const userId = await getUserId();
 
+  if (!userId) {
+    throw new Error("User ID is null or undefined");
+  }
+
   await prisma.user.update({
     where: {
-      id: userId,
+      id: userId as string,
     },
     data: {
       username: username,
@@ -92,7 +102,7 @@ export async function hasUserCreatedRoom() {
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: userId as string },
     select: { hasCreatedRoom: true }
   });
 
