@@ -10,15 +10,19 @@ import CharacterCounter from "./CharacterCounter";
 
 function InputText() {
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { send } = useMessages();
   const MAX_LENGTH = 150;
+  const COOLDOWN_TIME = 500;
   const params = useParams();
   const roomId = params?.roomId as string;
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (message.trim() === "") return;
+    if (message.trim() === "" || isSubmitting) return;
+
+    setIsSubmitting(true);
 
     try {
       const username = await fetchUsername();
@@ -47,6 +51,10 @@ function InputText() {
     }
 
     setMessage("");
+    
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, COOLDOWN_TIME);
   };
 
   return (
@@ -67,9 +75,9 @@ function InputText() {
       </div>
       <button
         type="submit"
-        disabled={message.trim().length === 0}
+        disabled={message.trim().length === 0 || isSubmitting}
         className={`px-4 py-2 rounded-lg transition-colors flex items-center justify-center ${
-          message.trim().length === 0
+          message.trim().length === 0 || isSubmitting
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
             : 'bg-[#7A80DA] text-white hover:bg-[#6269c5]'
         }`}
