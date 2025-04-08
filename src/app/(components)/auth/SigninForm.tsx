@@ -13,7 +13,9 @@ export default function SigninForm() {
         {/* Left Side - Welcome */}
         <div className="w-full md:w-1/2 bg-[#7A80DA] text-white flex flex-col justify-center items-center p-10">
           <h1 className="text-3xl font-bold mb-4">Bem-vindo ao</h1>
-          <h5 className="text-5xl py-5 px-10 text-center">ChatTalk!</h5>
+          <h5 className="text-5xl py-5 px-10 text-center cursor-default">
+            ChatTalk!
+          </h5>
           <p className="text-center text-sm mb-6">
             Não possui uma conta? <br />
             Registre-se agora mesmo.
