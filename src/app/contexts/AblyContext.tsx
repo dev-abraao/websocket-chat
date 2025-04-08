@@ -22,7 +22,7 @@ export function AblyProvider({
 
   useEffect(() => {
     const realtimeClient = new Ably.Realtime({
-      key: process.env.NEXT_PUBLIC_API_KEY,
+      key: "NhJcoA.Nyx0fQ:GYtfcRdXXu-_DEno3r8dS8rJBl_ojYaSTVLSfYtaV3U",
       clientId: userId || "client",
     });
     
