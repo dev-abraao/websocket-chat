@@ -11,6 +11,7 @@ interface ChatMessage {
   metadata?: {
     username?: string;
   };
+  timestamp?: Date | number;
 }
 
 interface DbMessage {

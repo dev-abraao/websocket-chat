@@ -32,7 +32,7 @@ export default async function HandleMessage(
     await saveMessage({
       content: message,
       roomId,
-      userId,
+      userId: userId as string,
     });
     console.log("Mensagem salva no banco de dados");
   } catch (error) {

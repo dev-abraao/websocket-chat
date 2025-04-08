@@ -83,7 +83,7 @@ export async function updateUsername(
 
   await prisma.user.update({
     where: {
-      id: userId,
+      id: userId as string,
     },
     data: {
       username: username,
