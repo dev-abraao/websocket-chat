@@ -112,7 +112,10 @@ export async function getRoomMembers(roomId: string) {
     },
   });
 
-  return members.map(member => ({
+  return members.map((member: {
+    user: { id: string; username: string };
+    joinedAt: Date;
+  }) => ({
     id: member.user.id,
     username: member.user.username,
     joinedAt: member.joinedAt

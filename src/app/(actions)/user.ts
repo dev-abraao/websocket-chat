@@ -49,16 +49,14 @@ export async function getUser(userId: string): Promise<IUser | null> {
 }
 
 export async function fetchUsername(): Promise<string | undefined | null> {
-  const userId = await getUserId() as string;
-  if (userId) {
-    if (typeof userId === "string") {
-      const user = await getUser(userId);
-      return user?.username;
-    }
+  const userId = await getUserId();
+  if (!userId) {
+    return null;
   }
-  return null;
+  
+  const user = await getUser(userId.toString());
+  return user?.username;
 }
-
 
 export async function updateUsername(
   state: nameModalState,
