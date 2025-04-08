@@ -13,7 +13,7 @@ function InputText() {
   const { send } = useMessages();
   const MAX_LENGTH = 150;
   const params = useParams();
-  const roomId = params.roomId as string;
+  const roomId = params?.roomId as string;
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();

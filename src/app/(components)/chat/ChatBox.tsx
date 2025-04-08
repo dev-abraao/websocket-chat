@@ -27,7 +27,7 @@ function ChatBox() {
   const [myUsername, setMyUsername] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-  const params = useParams();
+  const params = useParams() || {};
   const roomId = params.roomId as string;
 
   useEffect(() => {
