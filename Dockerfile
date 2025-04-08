@@ -24,15 +24,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
-
+# Adicione estas linhas para garantir que o Prisma gere o cliente
 RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  if [ -f yarn.lock ]; then yarn prisma generate; \
+  elif [ -f package-lock.json ]; then npx prisma generate; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm exec prisma generate; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
@@ -48,6 +44,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
+
+# Adicione esta linha para copiar a pasta prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
