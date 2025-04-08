@@ -17,7 +17,8 @@ export async function saveMessage({ content, roomId, userId }: SaveMessageProps)
         user_id: userId,
       },
     });
-    
+
+    console.log("Mensagem salva:", message.id);
     return message;
   } catch (error) {
     console.error("Erro ao salvar mensagem:", error);
@@ -26,8 +27,8 @@ export async function saveMessage({ content, roomId, userId }: SaveMessageProps)
 }
 
 export async function getMessagesByRoomId(roomId: string) {
-  console.log("Buscando mensagens para a sala:", roomId);
-  
+  console.log("Buscando mensagens para sala:", roomId);
+
   try {
     const messages = await prisma.messages.findMany({
       where: {
@@ -42,18 +43,19 @@ export async function getMessagesByRoomId(roomId: string) {
         },
       },
       orderBy: {
-        created_at: "asc", // Mensagens mais antigas primeiro
+        created_at: "asc",
       },
-      take: 100, // Limite de 100 mensagens para evitar sobrecarga
+      take: 100,
     });
-    
+
     console.log(`Encontradas ${messages.length} mensagens na sala ${roomId}`);
-    
+
     return messages.map(message => ({
       id: message.id,
       content: message.content,
       username: message.user.username,
       createdAt: message.created_at,
+      userId: message.user_id
     }));
   } catch (error) {
     console.error("Erro ao buscar mensagens:", error);
