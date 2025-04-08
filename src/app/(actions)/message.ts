@@ -8,6 +8,19 @@ interface SaveMessageProps {
   userId: string;
 }
 
+// Add a type for the message returned from Prisma query
+interface MessageWithUser {
+  id: string;
+  content: string;
+  user_id: string;
+  room_id: string;
+  created_at: Date;
+  user: {
+    id: string;
+    username: string;
+  };
+}
+
 export async function saveMessage({ content, roomId, userId }: SaveMessageProps) {
   try {
     const message = await prisma.messages.create({
@@ -50,7 +63,7 @@ export async function getMessagesByRoomId(roomId: string) {
 
     console.log(`Encontradas ${messages.length} mensagens na sala ${roomId}`);
 
-    return messages.map(message => ({
+    return messages.map((message: MessageWithUser) => ({
       id: message.id,
       content: message.content,
       username: message.user.username,
