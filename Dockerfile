@@ -2,7 +2,6 @@
 
 FROM node:18-alpine AS base
 
-# Install dependencies only when needed
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -21,7 +20,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Gera o Prisma Client após os arquivos estarem disponíveis
+# 👇 Apenas para debug - garante que o schema realmente existe antes de gerar
+RUN ls -la prisma && cat prisma/schema.prisma
+
+# 👇 Geração do Prisma Client
 RUN npx prisma generate
 
 RUN \
@@ -43,8 +45,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-COPY --from=builder /app/node_modules/.prisma /app/node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma /app/node_modules/@prisma
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 
 USER nextjs
