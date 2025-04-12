@@ -3,6 +3,9 @@ import { validateSession } from "@/(lib)/session";
 import { saveMessage } from "@/(actions)/message";
 import { z } from "zod";
 
+// Definir explicitamente o runtime como Node.js para poder usar Prisma
+export const runtime = 'nodejs';
+
 // Schema de validação para a mensagem
 const MessageSchema = z.object({
   content: z.string().max(150, { message: "Mensagem não pode exceder 150 caracteres" }),
