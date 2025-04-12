@@ -16,6 +16,7 @@ model User {
   ownedRooms    Rooms[]
   roomsJoined   UserInRoom[]
   hasCreatedRoom Boolean       @default(false)
+  sessions      Session[]      // Relação com a tabela de sessões
 }
 
 model Rooms {
@@ -48,4 +49,22 @@ model Messages {
   created_at DateTime @default(now())
   room       Rooms    @relation(fields: [room_id], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+// Nova tabela de sessões
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  isValid      Boolean  @default(true)
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([token])
+  @@index([userId])
 }
