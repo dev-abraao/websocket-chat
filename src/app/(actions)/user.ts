@@ -1,30 +1,32 @@
 "use server";
 
 import { IUser, nameModalState } from "@/(lib)/definitions";
-import { validateSession } from "@/(lib)/session";
+import { decrypt } from "@/(lib)/session";
 import { cookies } from "next/headers";
 import { prisma } from "@/(lib)/db";
 import { NameModalSchema } from "@/(lib)/definitions";
 
 export async function getUserId() {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session")?.value;
+  const session = cookieStore.get("session")?.value;
 
-  if (!sessionToken) {
+  if (!session) {
     console.log("Sessão não encontrada");
     return null;
   }
 
   try {
-    const sessionData = await validateSession(sessionToken);
-    if (!sessionData) {
-      console.error("Sessão inválida ou expirada");
+    const payload = await decrypt(session);
+    const userId = payload?.userId;
+
+    if (!userId) {
+      console.error("UserID não encontrado no payload da sessão");
       return null;
     }
 
-    return sessionData.userId;
+    return userId;
   } catch (error) {
-    console.error("Erro ao validar a sessão:", error);
+    console.error("Erro ao decodificar a sessão:", error);
     return null;
   }
 }

@@ -1,14 +1,6 @@
 "use server";
 
 import { prisma } from "@/(lib)/db";
-import { z } from "zod";
-
-// Schema de validação para a mensagem no servidor
-const MessageSchema = z.object({
-  content: z.string().max(150, { message: "Mensagem não pode exceder 150 caracteres" }),
-  roomId: z.string(),
-  userId: z.string(),
-});
 
 interface SaveMessageProps {
   content: string;
@@ -31,14 +23,11 @@ interface MessageWithUser {
 
 export async function saveMessage({ content, roomId, userId }: SaveMessageProps) {
   try {
-    // Validar os dados antes de salvar
-    const validatedData = MessageSchema.parse({ content, roomId, userId });
-    
     const message = await prisma.messages.create({
       data: {
-        content: validatedData.content,
-        room_id: validatedData.roomId,
-        user_id: validatedData.userId,
+        content,
+        room_id: roomId,
+        user_id: userId,
       },
     });
 
