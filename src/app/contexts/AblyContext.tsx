@@ -21,16 +21,8 @@ export function AblyProvider({
   const [clients, setClients] = useState<AblyContextType | null>(null);
 
   useEffect(() => {
-    // Usar o nome correto da variável de ambiente conforme definido no .env
-    const apiKey = process.env.NEXT_PUBLIC_ABLY_API_KEY;
-    
-    if (!apiKey) {
-      console.error("NEXT_PUBLIC_ABLY_API_KEY não está definida");
-      return;
-    }
-    
     const realtimeClient = new Ably.Realtime({
-      key: apiKey,
+      key: "NhJcoA.Nyx0fQ:GYtfcRdXXu-_DEno3r8dS8rJBl_ojYaSTVLSfYtaV3U",
       clientId: userId || "client",
     });
     
