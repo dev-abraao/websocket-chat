@@ -22,7 +22,7 @@ export function AblyProvider({
 
   useEffect(() => {
     // Usar o nome correto da variável de ambiente conforme definido no .env
-    const apiKey = process.env.NEXT_PUBLIC_ABLY_API_KEY;
+    const apiKey = "NhJcoA.Nyx0fQ:GYtfcRdXXu-_DEno3r8dS8rJBl_ojYaSTVLSfYtaV3U";
     
     if (!apiKey) {
       console.error("NEXT_PUBLIC_ABLY_API_KEY não está definida");
