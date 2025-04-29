@@ -45,6 +45,8 @@ model Messages {
   room_id    String
   content    String
   user_id    String
+  image_url  String?
+  type       String   @default("text")
   created_at DateTime @default(now())
   room       Rooms    @relation(fields: [room_id], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)

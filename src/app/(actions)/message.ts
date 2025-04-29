@@ -6,14 +6,17 @@ interface SaveMessageProps {
   content: string;
   roomId: string;
   userId: string;
+  imageUrl?: string;
+  type?:"text" | "image";
 }
 
-// Add a type for the message returned from Prisma query
 interface MessageWithUser {
   id: string;
   content: string;
   user_id: string;
   room_id: string;
+  image_url: string | null;
+  type: string;
   created_at: Date;
   user: {
     id: string;
@@ -21,13 +24,17 @@ interface MessageWithUser {
   };
 }
 
-export async function saveMessage({ content, roomId, userId }: SaveMessageProps) {
+export async function saveMessage({ content, roomId, userId, imageUrl, type = "text" }: SaveMessageProps) {
   try {
+    console.log("Saving message with data:", { content, roomId, userId, imageUrl, type });
+    
     const message = await prisma.messages.create({
       data: {
         content,
         room_id: roomId,
         user_id: userId,
+        image_url: imageUrl || null,
+        type: type,
       },
     });
 
@@ -67,6 +74,8 @@ export async function getMessagesByRoomId(roomId: string) {
       id: message.id,
       content: message.content,
       username: message.user.username,
+      imageUrl: message.image_url,
+      type: message.type,
       createdAt: message.created_at,
       userId: message.user_id
     }));

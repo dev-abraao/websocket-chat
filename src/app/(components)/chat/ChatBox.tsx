@@ -5,12 +5,15 @@ import { useMessages } from "@ably/chat";
 import { fetchUsername } from "@/(actions)/user";
 import { getMessagesByRoomId } from "@/(actions)/message";
 import { useParams } from "next/navigation";
+import Image from "next/image";
+import ImageModal from "./ImageModal";
 
 interface ChatMessage {
   id?: string;
   text: string;
   metadata?: {
     username?: string;
+    imageUrl?: string;
   };
   timestamp?: Date | number;
 }
@@ -20,6 +23,8 @@ interface DbMessage {
   content: string;
   username: string;
   createdAt: Date;
+  imageUrl?: string | null;
+  type?: string;
 }
 
 function ChatBox() {
@@ -28,6 +33,7 @@ function ChatBox() {
   const [myUsername, setMyUsername] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAutoScroll, setIsAutoScroll] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const params = useParams() || {};
@@ -67,20 +73,30 @@ function ChatBox() {
   });
 
   const allMessages = useMemo(() => {
-    return [
+    const combined = [
       ...dbMessages.map(msg => ({
         id: msg.id,
         text: msg.content,
-        metadata: { username: msg.username },
-        timestamp: new Date(msg.createdAt).getTime()
+        metadata: { 
+          username: msg.username,
+          imageUrl: msg.imageUrl
+        },
+        timestamp: new Date(msg.createdAt).getTime(),
+        type: msg.type || "text"
       })),
       ...receivedMessages.map(msg => ({
         ...msg,
-        id: msg.id || `${msg.timestamp}-${msg.metadata?.username}`,
-        timestamp: new Date(msg.timestamp || Date.now()).getTime()
+        id: msg.id || `${Date.now()}-${Math.random()}`,
+        timestamp: msg.timestamp ? new Date(msg.timestamp).getTime() : Date.now(),
+        type: msg.metadata?.imageUrl ? "image" : "text"
       }))
-    ].filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-     .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    ];
+    
+    const uniqueMessages = combined.filter((v, i, a) => 
+      a.findIndex(t => t.id === v.id) === i
+    );
+    
+    return uniqueMessages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
   }, [dbMessages, receivedMessages]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
@@ -128,6 +144,8 @@ function ChatBox() {
         ) : (
           allMessages.map((msg) => {
             const isMyMessage = msg.metadata?.username === myUsername;
+            const hasImage = msg.metadata?.imageUrl || msg.type === "image";
+            const imageUrl = msg.metadata?.imageUrl;
 
             return (
               <div
@@ -136,7 +154,7 @@ function ChatBox() {
               >
                 <div
                   className={`max-w-[90%] md:max-w-[70%] break-words rounded-lg px-4 py-2 ${
-                    isMyMessage ? "bg-[#7A80DA] text-white" : "bg-white shadow-md"
+                    isMyMessage && !imageUrl ? "bg-[#7A80DA] text-white" : "bg-white shadow-md"
                   }`}
                 >
                   {!isMyMessage && (
@@ -144,7 +162,31 @@ function ChatBox() {
                       {msg.metadata?.username || "Usuário"}
                     </div>
                   )}
-                  <div className="text-sm">{msg.text}</div>
+                  
+                  {imageUrl && (
+                    <div className="mb-2 mt-1">
+                      <div 
+                        onClick={() => setSelectedImage(imageUrl)}
+                        className="cursor-pointer"
+                      >
+                        <Image
+                          src={imageUrl}
+                          width={300}
+                          height={300}
+                          priority
+                          quality={100}
+                          placeholder="blur"
+                          blurDataURL={imageUrl}
+                          alt="Imagem compartilhada"
+                          className="max-w-full rounded-md hover:opacity-90 transition-opacity"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(msg.text && (!hasImage || msg.text !== "📷 Imagem")) && (
+                    <div className="text-sm">{msg.text}</div>
+                  )}
                 </div>
               </div>
             );
@@ -152,6 +194,13 @@ function ChatBox() {
         )}
         <div ref={messagesEndRef} />
       </div>
+      
+      {/* Image Modal */}
+      <ImageModal 
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+        imageUrl={selectedImage || ''}
+      />
     </div>
   );
 }
