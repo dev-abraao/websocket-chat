@@ -1,3 +1,4 @@
+// pushing to github the nextjs app
 import React from "react";
 import SignupForm from "./(components)/auth/SignupForm";
 
