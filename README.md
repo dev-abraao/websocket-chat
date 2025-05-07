@@ -69,5 +69,16 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 - localhost:5432 = porta do banco de dados
 - mydb = nome do banco de dados
 
+### Aplicar as migrações do prisma
+Após o banco de dados estar conectado, você precisará rodar as migrations para criação das tabelas no seu ambiente local de desenvolvimento, para isso rode o comando abaixo no terminal.
+
+```
+npx prisma migrate
+```
+
+Após este comando a aplicação deverá estar rodando normalmente na sua máquina, espero que goste da experiência ;)
+
+
+
 
 
