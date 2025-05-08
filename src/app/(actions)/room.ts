@@ -2,6 +2,7 @@
 import { prisma } from "@/(lib)/db";
 import { RoomFormSchema, RoomFormState } from "@/(lib)/definitions";
 import { getUserId } from "@/(actions)/user";
+import bcrypt from "bcryptjs";
 
 export default async function createRoom(
   state: RoomFormState,
@@ -61,9 +62,42 @@ export async function getDefaultRoomId() {
       is_default_room: true,
     },
   });
+
   if (!room) {
-    throw new Error("No default room found");
+
+    const hashedPassword = await bcrypt.hash("admin123", 10);
+    // Create admin user if doesn't exist
+    const admin = await prisma.user.upsert({
+      where: {
+        login: 'admin'
+      },
+      update: {},
+      create: {
+        login: 'admin@gmail.com',
+        username: 'Administrator',
+        password: hashedPassword, // In production, use hashed password
+        hasCreatedRoom: true
+      }
+    });
+
+    // Create default room
+    const newRoom = await prisma.rooms.create({
+      data: {
+        name: 'General',
+        description: 'Welcome to the general chat room!',
+        owner_id: admin.id,
+        is_default_room: true,
+        members: {
+          create: {
+            userId: admin.id
+          }
+        }
+      }
+    });
+
+    return newRoom.id;
   }
+
   return room.id;
 }
 
