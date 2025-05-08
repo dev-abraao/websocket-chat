@@ -28,7 +28,7 @@ as funcionalidades do Next.js são diversas, mas as que mais tomamos proveito fo
 #### JWT para autenticação
 - O [JWT](https://jwt.io/) foi utilizado para autorização dos usuários, quando uma sessão é criada um payload criptografado é enviado para o cookie contendo alguns dados importantes para verificação do usuário conectado.
 
-## Como rodar o projeto localmente
+## Como rodar o projeto localmente (CASO ESTEJA USANDO DOCKER PARA RODAR VÁ PARA O FIM DO README 😍)
 
 ### Clone do repositório
 
@@ -73,11 +73,24 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 Após o banco de dados estar conectado, você precisará rodar as migrations para criação das tabelas no seu ambiente local de desenvolvimento, para isso rode o comando abaixo no terminal.
 
 ```
-npx prisma migrate
+npx prisma migrate deploy
 ```
 
 Após este comando a aplicação deverá estar rodando normalmente na sua máquina, espero que goste da experiência ;)
 
+## Docker compose
+
+### Caso esteja utilizando o docker
+
+####Para a primeira vez utilizando 
+```
+docker compose up --build
+```
+
+####Se não 
+```
+docker compose up
+```
 
 
 
