@@ -82,12 +82,12 @@ Após este comando a aplicação deverá estar rodando normalmente na sua máqui
 
 ### Caso esteja utilizando o docker
 
-####Para a primeira vez utilizando 
+#### Para a primeira vez utilizando 
 ```
 docker compose up --build
 ```
 
-####Se não 
+#### Se não 
 ```
 docker compose up
 ```
