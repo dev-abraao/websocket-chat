@@ -30,6 +30,8 @@ as funcionalidades do Next.js são diversas, mas as que mais tomamos proveito fo
 
 ## Como rodar o projeto localmente (CASO ESTEJA USANDO DOCKER PARA RODAR VÁ PARA O FIM DO README 😍)
 
+### 🚨 Observação: Cheque se você está na main branch
+
 ### Clone do repositório
 
 Abra o GIT Bash na pasta que você deseja clonar o repositório na sua máquina e cole o seguinte comando.
@@ -78,7 +80,9 @@ npx prisma migrate deploy
 
 Após este comando a aplicação deverá estar rodando normalmente na sua máquina, espero que goste da experiência ;)
 
-## Docker compose
+## Docker
+
+### 🚨 Observação: Para o docker funcionar você precisará estar na branch [feature-docker]
 
 ### Caso esteja utilizando o docker
 
